@@ -2,6 +2,7 @@
     "name": "alexandredaubois/ifyousayso",
     "description": "Get useless statistics from your PHP code.",
     "type": "library",
+    "license": "MIT",
     "require": {
         "symfony/property-info": "^6.0",
         "symfony/finder": "^6.0"
