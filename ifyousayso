@@ -1,0 +1,46 @@
+#!/usr/bin/env php
+<?php declare(strict_types=1);
+/*
+ * This file is part of IfYouSaySo.
+ *
+ * (c) Alexandre Daubois <alex.daubois@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+if (\PHP_VERSION_ID < 80000) {
+    fwrite(
+        STDERR,
+        \sprintf("You must use at least PHP 8.0.0, and you're using PHP %s. Please consider upgrading your PHP binary.", \PHP_VERSION)
+    );
+
+    exit(1);
+}
+
+if (isset($GLOBALS['_composer_autoload_path'])) {
+    \define('LOCAL_COMPOSER_INSTALL', $GLOBALS['_composer_autoload_path']);
+} else {
+    foreach (array(__DIR__.'/../../autoload.php', __DIR__.'/../vendor/autoload.php', __DIR__.'/vendor/autoload.php') as $file) {
+        if (\file_exists($file)) {
+            \define('LOCAL_COMPOSER_INSTALL', $file);
+
+            break;
+        }
+    }
+
+    unset($file);
+}
+
+if (!defined('LOCAL_COMPOSER_INSTALL')) {
+    \fwrite(
+        STDERR,
+        'Composer has not been setup. Please consider running `composer install`.'.\PHP_EOL
+    );
+
+    exit(1);
+}
+
+require LOCAL_COMPOSER_INSTALL;
+
+\Runner\Runner::main();
