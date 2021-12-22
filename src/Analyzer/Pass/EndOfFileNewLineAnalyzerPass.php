@@ -17,16 +17,14 @@ use Symfony\Component\Finder\SplFileInfo;
 /**
  * @author Alexandre Daubois <alex.daubois@gmail.com>
  */
-class BlankSpacesAnalyzerPass implements AnalyzerPassInterface
+class EndOfFileNewLineAnalyzerPass implements AnalyzerPassInterface
 {
     public function analyze(SplFileInfo $file): void
     {
         $content = $file->getContents();
 
-        for ($i = 0; $i < \strlen($content); ++$i) {
-            if (' ' === $content[$i]) {
-                AnalyzerState::getInstance()->increment(AnalyzerState::BLANK_SPACES);
-            }
+        if ("\n" === $content[\strlen($content)-1]) {
+            AnalyzerState::getInstance()->increment(AnalyzerState::END_OF_FILE_NEW_LINE);
         }
     }
 }

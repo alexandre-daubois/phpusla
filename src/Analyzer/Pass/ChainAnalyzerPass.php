@@ -17,16 +17,29 @@ use Symfony\Component\Finder\SplFileInfo;
 /**
  * @author Alexandre Daubois <alex.daubois@gmail.com>
  */
-class BlankSpacesAnalyzerPass implements AnalyzerPassInterface
+class ChainAnalyzerPass implements AnalyzerPassInterface
 {
+    /**
+     * @var AnalyzerPassInterface[]
+     */
+    private array $passes;
+
+    public function __construct(array $passes)
+    {
+        $this->passes = $passes;
+    }
+
     public function analyze(SplFileInfo $file): void
     {
-        $content = $file->getContents();
-
-        for ($i = 0; $i < \strlen($content); ++$i) {
-            if (' ' === $content[$i]) {
-                AnalyzerState::getInstance()->increment(AnalyzerState::BLANK_SPACES);
-            }
+        foreach ($this->passes as $pass) {
+            $pass->analyze($file);
         }
+    }
+
+    public function addPass(AnalyzerPassInterface $pass): ChainAnalyzerPass
+    {
+        $this->passes[] = $pass;
+
+        return $this;
     }
 }

@@ -7,4 +7,6 @@ IYSS is a PHP code analysis tool dedicated to give you useless statistics on you
 ## Available statistics
 
 - Blank spaces in your project
+- Count of defined classes and anonymous classes
+- Count of files finishing with a new-line
 - _More to come_

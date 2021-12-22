@@ -11,11 +11,13 @@
 
 namespace Runner;
 
+use Analyzer\Pass\ClassesAnalyzerPass;
+use Analyzer\Pass\EndOfFileNewLineAnalyzerPass;
 use Analyzer\PassesAnalyzer;
 use Analyzer\AnalyzerInterface;
 use Analyzer\Pass\BlankSpacesAnalyzerPass;
 use Finder\PhpFileFinder;
-use State\RunnerState;
+use State\AnalyzerState;
 use Symfony\Component\Finder\SplFileInfo;
 
 /**
@@ -47,12 +49,14 @@ final class Runner
             $analyzer->analyze($file);
         }
 
-        var_dump(RunnerState::getInstance()->getState());
+        var_dump(AnalyzerState::getInstance()->getState());
     }
 
     private static function registerAnalyzerPasses(AnalyzerInterface $analyzer): void
     {
         $analyzer
-            ->registerPass(new BlankSpacesAnalyzerPass());
+            ->registerPass(new BlankSpacesAnalyzerPass())
+            ->registerPass(new ClassesAnalyzerPass())
+            ->registerPass(new EndOfFileNewLineAnalyzerPass());
     }
 }

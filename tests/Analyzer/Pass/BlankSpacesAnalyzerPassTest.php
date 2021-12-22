@@ -3,7 +3,7 @@
 namespace Tests\Analyzer\Pass;
 
 use Analyzer\Pass\BlankSpacesAnalyzerPass;
-use State\RunnerState;
+use State\AnalyzerState;
 
 class BlankSpacesAnalyzerPassTest extends AnalyzerPassTest
 {
@@ -14,6 +14,6 @@ class BlankSpacesAnalyzerPassTest extends AnalyzerPassTest
         $pass = new BlankSpacesAnalyzerPass();
         $pass->analyze($file);
 
-        $this->assertRunnerStateTypeSame(RunnerState::BLANK_SPACES, 6);
+        $this->assertRunnerStateTypeCountSame(AnalyzerState::BLANK_SPACES, 6);
     }
 }

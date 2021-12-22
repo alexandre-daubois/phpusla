@@ -4,8 +4,9 @@
     "type": "library",
     "license": "MIT",
     "require": {
-        "symfony/property-info": "^6.0",
-        "symfony/finder": "^6.0"
+        "nikic/php-parser": "^4.13",
+        "symfony/finder": "^6.0",
+        "symfony/property-info": "^6.0"
     },
     "config": {
         "platform": {
