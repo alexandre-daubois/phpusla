@@ -6,7 +6,9 @@ PHPUsla is a PHP code analysis tool dedicated to give you useless analytics abou
 
 ## Available statistics
 
+- Total characters
 - Blank spaces in your project
 - Count of defined classes and anonymous classes
 - Count of files finishing with a new-line
+- Quotes statistics
 - _More to come_
