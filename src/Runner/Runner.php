@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of IfYouSaySo.
+ * This file is part of PHPUsla.
  *
  * (c) Alexandre Daubois <alex.daubois@gmail.com>
  *

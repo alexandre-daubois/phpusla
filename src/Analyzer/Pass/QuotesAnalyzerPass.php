@@ -17,10 +17,16 @@ use Symfony\Component\Finder\SplFileInfo;
 /**
  * @author Alexandre Daubois <alex.daubois@gmail.com>
  */
-class TotalCharsAnalyzerPass implements AnalyzerPassInterface
+class QuotesAnalyzerPass implements AnalyzerPassInterface
 {
     public function analyze(SplFileInfo $file): void
     {
-        AnalyzerState::getInstance()->increment(AnalyzerState::TOTAL_CHARS, \strlen($file->getContents()));
+        $content = $file->getContents();
+
+        for ($i = 0; $i < \strlen($content); ++$i) {
+            if (' ' === $content[$i]) {
+                AnalyzerState::getInstance()->increment(AnalyzerState::BLANK_SPACES);
+            }
+        }
     }
 }

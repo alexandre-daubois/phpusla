@@ -1,8 +1,11 @@
 {
-    "name": "alexandredaubois/ifyousayso",
+    "name": "alexandredaubois/phpusla",
     "description": "Get useless statistics from your PHP code.",
     "type": "library",
-    "license": "MIT",
+    "license": "BSD-3-Clause",
+    "support": {
+        "issues": "https://github.com/alexandredaubois/phpusla/issues"
+    },
     "require": {
         "nikic/php-parser": "^4.13",
         "symfony/console": "^6.0",
@@ -17,7 +20,7 @@
         "sort-packages": true
     },
     "bin": [
-        "ifyousayso"
+        "phpusla"
     ],
     "autoload": {
         "classmap": [

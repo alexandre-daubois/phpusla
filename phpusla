@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php declare(strict_types=1);
 /*
- * This file is part of IfYouSaySo.
+ * This file is part of PHPUsla.
  *
  * (c) Alexandre Daubois <alex.daubois@gmail.com>
  *
