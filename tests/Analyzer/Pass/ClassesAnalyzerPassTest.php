@@ -15,7 +15,7 @@ class ClassesAnalyzerPassTest extends AnalyzerPassTest
         $pass = new ClassesAnalyzerPass();
         $pass->analyze($file);
 
-        $this->assertRunnerStateTypeCountSame(AnalyzerState::CLASSES_DEFINED, 2);
+        $this->assertRunnerStateTypeCountSame(AnalyzerState::CLASSES_DEFINED, 3);
         $this->assertRunnerStateTypeCountSame(AnalyzerState::ANONYMOUS_CLASSES_DEFINED, 1);
     }
 }

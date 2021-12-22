@@ -17,14 +17,10 @@ use Symfony\Component\Finder\SplFileInfo;
 /**
  * @author Alexandre Daubois <alex.daubois@gmail.com>
  */
-class EndOfFileNewLineAnalyzerPass implements AnalyzerPassInterface
+class TotalCharsAnalyzerPass implements AnalyzerPassInterface
 {
     public function analyze(SplFileInfo $file): void
     {
-        $content = $file->getContents();
-
-        if (\strlen($content) > 0 && "\n" === $content[\strlen($content)-1]) {
-            AnalyzerState::getInstance()->increment(AnalyzerState::END_OF_FILE_NEW_LINE);
-        }
+        AnalyzerState::getInstance()->increment(AnalyzerState::TOTAL_CHARS, \strlen($file->getContents()));
     }
 }

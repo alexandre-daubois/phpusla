@@ -13,11 +13,15 @@ namespace Runner;
 
 use Analyzer\Pass\ClassesAnalyzerPass;
 use Analyzer\Pass\EndOfFileNewLineAnalyzerPass;
+use Analyzer\Pass\TotalCharsAnalyzerPass;
 use Analyzer\PassesAnalyzer;
 use Analyzer\AnalyzerInterface;
 use Analyzer\Pass\BlankSpacesAnalyzerPass;
 use Finder\PhpFileFinder;
 use State\AnalyzerState;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\SplFileInfo;
 
 /**
@@ -25,36 +29,36 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 final class Runner
 {
-    public static function main(): void
+    public static function main(OutputInterface $output, string $directory): int
     {
-        if (!isset($_SERVER['argv'][1])) {
-            \fwrite(
-                \STDERR,
-                "You must pass the root directory as the first argument of the command.".\PHP_EOL
-            );
-
-            exit(1);
-        }
-
-        $finder = new PhpFileFinder($_SERVER['argv'][1]);
+        $finder = new PhpFileFinder($directory);
         $analyzer = new PassesAnalyzer();
 
         self::registerAnalyzerPasses($analyzer);
 
         $results = $finder->find();
-        echo \sprintf("Found %d files.\n", $results->count());
+        $output->writeln(\sprintf("Found %d files.", $results->count()));
+
+        $progressBar = new ProgressBar($output, $results->count());
 
         /** @var SplFileInfo $file */
         foreach ($results->getIterator() as $file) {
             $analyzer->analyze($file);
+            $progressBar->advance();
         }
 
-        var_dump(AnalyzerState::getInstance()->getState());
+        $progressBar->finish();
+        $output->writeln("\nFinished the work! Here are the useless results:");
+
+        AnalyzerState::getInstance()->prettyPrint($output, $results->count());
+
+        return Command::SUCCESS;
     }
 
     private static function registerAnalyzerPasses(AnalyzerInterface $analyzer): void
     {
         $analyzer
+            ->registerPass(new TotalCharsAnalyzerPass())
             ->registerPass(new BlankSpacesAnalyzerPass())
             ->registerPass(new ClassesAnalyzerPass())
             ->registerPass(new EndOfFileNewLineAnalyzerPass());

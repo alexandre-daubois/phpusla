@@ -5,6 +5,7 @@
     "license": "MIT",
     "require": {
         "nikic/php-parser": "^4.13",
+        "symfony/console": "^6.0",
         "symfony/finder": "^6.0",
         "symfony/property-info": "^6.0"
     },

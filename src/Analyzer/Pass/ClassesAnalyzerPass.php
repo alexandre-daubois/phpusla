@@ -42,7 +42,11 @@ class ClassesAnalyzerPass extends AbstractASTAnalyzerPass
                     return;
                 }
 
-                $this->analyzeResults[$node->isAnonymous() ? AnalyzerState::ANONYMOUS_CLASSES_DEFINED : AnalyzerState::CLASSES_DEFINED]++;
+                if ($node->isAnonymous()) {
+                    $this->analyzeResults[AnalyzerState::ANONYMOUS_CLASSES_DEFINED]++;
+                }
+
+                $this->analyzeResults[AnalyzerState::CLASSES_DEFINED]++;
             }
         });
 
