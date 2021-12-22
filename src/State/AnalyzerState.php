@@ -20,14 +20,16 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 final class AnalyzerState
 {
-    // Statistics meant to be displayed.
     public const BLANK_SPACES = 'Blank spaces';
-    public const ANONYMOUS_CLASSES_DEFINED = 'Anonymous classes defined';
-    public const CLASSES_DEFINED = 'Classes defined';
-    public const END_OF_FILE_NEW_LINE = 'Files finishing with a new line';
     public const TOTAL_CHARS = 'Total characters';
 
-    private const END_OF_FILE_NOT_NEW_LINE = 'Files NOT finishing with a new line';
+    public const ANONYMOUS_CLASSES_DEFINED = 'Anonymous classes defined';
+    public const CLASSES_DEFINED = 'Classes defined';
+
+    public const END_OF_FILE_NEW_LINE = 'Files finishing with a new line';
+
+    public const DOUBLE_QUOTES = 'Double quotes';
+    public const SINGLE_QUOTES = 'Single quotes';
 
     public const TYPES = [
         self::BLANK_SPACES,
@@ -35,6 +37,8 @@ final class AnalyzerState
         self::ANONYMOUS_CLASSES_DEFINED,
         self::END_OF_FILE_NEW_LINE,
         self::TOTAL_CHARS,
+        self::DOUBLE_QUOTES,
+        self::SINGLE_QUOTES,
     ];
 
     private static ?AnalyzerState $runnerState = null;
@@ -106,7 +110,27 @@ final class AnalyzerState
             }),
             new TableSeparator(),
             $this->getRowByType(self::END_OF_FILE_NEW_LINE, comment: static function () use ($totalFiles) {
-                return \sprintf("This left %d files without newline at their end.", $totalFiles - self::getInstance()->getTypeCount(self::END_OF_FILE_NEW_LINE));
+                return \sprintf("This leaves %d files without newline at their end.", $totalFiles - self::getInstance()->getTypeCount(self::END_OF_FILE_NEW_LINE));
+            }),
+            new TableSeparator(),
+            $this->getRowByType("Quotes",
+                static function () {
+                    return \sprintf('%d single quotes, %d double quotes',
+                        self::getInstance()->getTypeCount(self::SINGLE_QUOTES),
+                        self::getInstance()->getTypeCount(self::DOUBLE_QUOTES),
+                    );
+                },
+                static function () {
+                $singleQuotes = self::getInstance()->getTypeCount(self::SINGLE_QUOTES);
+                $doubleQuotes = self::getInstance()->getTypeCount(self::DOUBLE_QUOTES);
+
+                if ($singleQuotes > $doubleQuotes) {
+                    return \sprintf("%.2fx more single than double quotes.", $singleQuotes/$doubleQuotes);
+                } elseif ($singleQuotes < $doubleQuotes) {
+                    return \sprintf("%.2fx less single than double quotes.", $doubleQuotes/$singleQuotes);
+                }
+
+                return \sprintf("Single ou double quotes are equally distributed, %d each!", $singleQuotes);
             }),
         ]);
 

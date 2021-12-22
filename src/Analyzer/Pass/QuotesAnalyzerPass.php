@@ -24,8 +24,10 @@ class QuotesAnalyzerPass implements AnalyzerPassInterface
         $content = $file->getContents();
 
         for ($i = 0; $i < \strlen($content); ++$i) {
-            if (' ' === $content[$i]) {
-                AnalyzerState::getInstance()->increment(AnalyzerState::BLANK_SPACES);
+            if ('\'' === $content[$i]) {
+                AnalyzerState::getInstance()->increment(AnalyzerState::SINGLE_QUOTES);
+            } elseif ('"' === $content[$i]) {
+                AnalyzerState::getInstance()->increment(AnalyzerState::DOUBLE_QUOTES);
             }
         }
     }

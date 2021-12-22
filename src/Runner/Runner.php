@@ -13,6 +13,7 @@ namespace Runner;
 
 use Analyzer\Pass\ClassesAnalyzerPass;
 use Analyzer\Pass\EndOfFileNewLineAnalyzerPass;
+use Analyzer\Pass\QuotesAnalyzerPass;
 use Analyzer\Pass\TotalCharsAnalyzerPass;
 use Analyzer\PassesAnalyzer;
 use Analyzer\AnalyzerInterface;
@@ -61,6 +62,8 @@ final class Runner
             ->registerPass(new TotalCharsAnalyzerPass())
             ->registerPass(new BlankSpacesAnalyzerPass())
             ->registerPass(new ClassesAnalyzerPass())
-            ->registerPass(new EndOfFileNewLineAnalyzerPass());
+            ->registerPass(new EndOfFileNewLineAnalyzerPass())
+            ->registerPass(new QuotesAnalyzerPass())
+        ;
     }
 }

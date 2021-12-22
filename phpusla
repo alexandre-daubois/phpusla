@@ -52,7 +52,7 @@ use Symfony\Component\Console\SingleCommandApplication;
 
 (new SingleCommandApplication())
     ->setVersion('1.0.0')
-    ->addArgument('directory', InputArgument::REQUIRED, 'The directory')
+    ->addArgument('directory', InputArgument::REQUIRED, 'The directory to analyze uselessly.')
     ->setCode(function (InputInterface $input, OutputInterface $output) {
         $directory = $input->getArgument('directory');
 
