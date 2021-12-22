@@ -24,7 +24,7 @@ class PassesAnalyzerTest extends TestCase
 
         $pass = $this->createMock(BlankSpacesAnalyzerPass::class);
         $pass->expects($this->once())
-            ->method('pass');
+            ->method('analyze');
 
         $analyzer->registerPass($pass);
         $analyzer->analyze($this->createMock(SplFileInfo::class));

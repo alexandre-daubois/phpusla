@@ -27,7 +27,7 @@ final class PassesAnalyzer implements AnalyzerInterface
     public function analyze(SplFileInfo $file): void
     {
         foreach ($this->passes as $pass) {
-            $pass->pass($file);
+            $pass->analyze($file);
         }
     }
 

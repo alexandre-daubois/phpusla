@@ -12,7 +12,7 @@ class BlankSpacesAnalyzerPassTest extends AnalyzerPassTest
         $file = $this->mockSplFileInfoWithContents(\file_get_contents(__DIR__.'/../../Fixtures/blank_spaces.txt'));
 
         $pass = new BlankSpacesAnalyzerPass();
-        $pass->pass($file);
+        $pass->analyze($file);
 
         $this->assertRunnerStateTypeSame(RunnerState::BLANK_SPACES, 6);
     }

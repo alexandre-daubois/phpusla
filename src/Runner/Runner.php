@@ -39,8 +39,11 @@ final class Runner
 
         self::registerAnalyzerPasses($analyzer);
 
+        $results = $finder->find();
+        echo \sprintf("Found %d files.\n", $results->count());
+
         /** @var SplFileInfo $file */
-        foreach ($finder->find() as $file) {
+        foreach ($results->getIterator() as $file) {
             $analyzer->analyze($file);
         }
 

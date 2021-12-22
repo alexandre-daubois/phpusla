@@ -33,14 +33,12 @@ class AbstractFinder implements FinderInterface
         $this->extensions = $extensions;
     }
 
-    public function find(): \Traversable
+    public function find(): Finder
     {
-        $finder = new Finder();
-
-        return $finder->in($this->rootDirectory)
+        return (new Finder())
+            ->in($this->rootDirectory)
             ->files()
             ->ignoreUnreadableDirs(true)
-            ->name(\array_map(static fn ($extension) => '*'.$extension, $this->extensions))
-            ->getIterator();
+            ->name(\array_map(static fn ($extension) => '*'.$extension, $this->extensions));
     }
 }

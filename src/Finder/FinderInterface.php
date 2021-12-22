@@ -11,10 +11,12 @@
 
 namespace Finder;
 
+use Symfony\Component\Finder\Finder;
+
 /**
  * @author Alexandre Daubois <alex.daubois@gmail.com>
  */
 interface FinderInterface
 {
-    public function find(): \Traversable;
+    public function find(): Finder;
 }

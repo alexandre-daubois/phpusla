@@ -19,7 +19,7 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 class BlankSpacesAnalyzerPass implements AnalyzerPassInterface
 {
-    public function pass(SplFileInfo $file): void
+    public function analyze(SplFileInfo $file): void
     {
         $content = $file->getContents();
 

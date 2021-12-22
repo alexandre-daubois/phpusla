@@ -18,5 +18,5 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 interface AnalyzerPassInterface
 {
-    public function pass(SplFileInfo $file): void;
+    public function analyze(SplFileInfo $file): void;
 }
