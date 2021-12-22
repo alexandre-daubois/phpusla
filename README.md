@@ -1,6 +1,6 @@
-# If You Say So (IYSS)
+# PHPUsla
 
-IYSS is a PHP code analysis tool dedicated to give you useless statistics on your code.
+PHPUsla is a PHP code analysis tool dedicated to give you useless analytics about your code.
 
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%208.0-8892BF.svg?style=flat-square)](https://php.net/)
 
