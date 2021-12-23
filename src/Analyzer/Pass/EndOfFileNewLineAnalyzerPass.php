@@ -19,12 +19,12 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 class EndOfFileNewLineAnalyzerPass implements AnalyzerPassInterface
 {
-    public function analyze(SplFileInfo $file): void
+    public function analyze(SplFileInfo $file, AnalyzerState $analyzerState): void
     {
         $content = $file->getContents();
 
         if (\strlen($content) > 0 && "\n" === $content[\strlen($content)-1]) {
-            AnalyzerState::getInstance()->increment(AnalyzerState::END_OF_FILE_NEW_LINE);
+            $analyzerState->increment(AnalyzerState::END_OF_FILE_NEW_LINE);
         }
     }
 }

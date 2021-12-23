@@ -21,7 +21,7 @@ use State\AnalyzerState;
  */
 class ClassesAnalyzerPass extends AbstractASTAnalyzerPass
 {
-    protected function analyzeAST(array $ast): void
+    protected function analyzeAST(array $ast, AnalyzerState $analyzerState): void
     {
         $analyzeResults = [
             AnalyzerState::ANONYMOUS_CLASSES_DEFINED => 0,
@@ -51,7 +51,7 @@ class ClassesAnalyzerPass extends AbstractASTAnalyzerPass
         });
 
         $traverser->traverse($ast);
-        AnalyzerState::getInstance()->increment(AnalyzerState::ANONYMOUS_CLASSES_DEFINED, $analyzeResults[AnalyzerState::ANONYMOUS_CLASSES_DEFINED]);
-        AnalyzerState::getInstance()->increment(AnalyzerState::CLASSES_DEFINED, $analyzeResults[AnalyzerState::CLASSES_DEFINED]);
+        $analyzerState->increment(AnalyzerState::ANONYMOUS_CLASSES_DEFINED, $analyzeResults[AnalyzerState::ANONYMOUS_CLASSES_DEFINED]);
+        $analyzerState->increment(AnalyzerState::CLASSES_DEFINED, $analyzeResults[AnalyzerState::CLASSES_DEFINED]);
     }
 }

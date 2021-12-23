@@ -11,11 +11,12 @@ class ClassesAnalyzerPassTest extends AnalyzerPassTest
     public function testItWorks(): void
     {
         $file = $this->mockSplFileInfoWithContents(\file_get_contents(__DIR__.'/../../Fixtures/Classes.php'));
+        $state = new AnalyzerState();
 
         $pass = new ClassesAnalyzerPass();
-        $pass->analyze($file);
+        $pass->analyze($file, $state);
 
-        $this->assertRunnerStateTypeCountSame(AnalyzerState::CLASSES_DEFINED, 3);
-        $this->assertRunnerStateTypeCountSame(AnalyzerState::ANONYMOUS_CLASSES_DEFINED, 1);
+        $this->assertSame(3, $state->getTypeCount(AnalyzerState::CLASSES_DEFINED));
+        $this->assertSame(1, $state->getTypeCount(AnalyzerState::ANONYMOUS_CLASSES_DEFINED));
     }
 }

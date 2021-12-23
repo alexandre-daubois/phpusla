@@ -11,6 +11,7 @@
 
 namespace Analyzer\Pass;
 
+use State\AnalyzerState;
 use Symfony\Component\Finder\SplFileInfo;
 
 /**
@@ -18,5 +19,5 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 interface AnalyzerPassInterface
 {
-    public function analyze(SplFileInfo $file): void;
+    public function analyze(SplFileInfo $file, AnalyzerState $analyzerState): void;
 }

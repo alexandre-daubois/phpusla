@@ -10,11 +10,12 @@ class QuotesAnalyzerPassTest extends AnalyzerPassTest
     public function testItWorks(): void
     {
         $file = $this->mockSplFileInfoWithContents("'my super test' with \"different' quotes");
+        $state = new AnalyzerState();
 
         $pass = new QuotesAnalyzerPass();
-        $pass->analyze($file);
+        $pass->analyze($file, $state);
 
-        $this->assertRunnerStateTypeCountSame(AnalyzerState::SINGLE_QUOTES, 3);
-        $this->assertRunnerStateTypeCountSame(AnalyzerState::DOUBLE_QUOTES, 1);
+        $this->assertSame(3, $state->getTypeCount(AnalyzerState::SINGLE_QUOTES));
+        $this->assertSame(1, $state->getTypeCount(AnalyzerState::DOUBLE_QUOTES));
     }
 }

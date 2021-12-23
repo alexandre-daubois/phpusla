@@ -19,15 +19,15 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 class QuotesAnalyzerPass implements AnalyzerPassInterface
 {
-    public function analyze(SplFileInfo $file): void
+    public function analyze(SplFileInfo $file, AnalyzerState $analyzerState): void
     {
         $content = $file->getContents();
 
         for ($i = 0; $i < \strlen($content); ++$i) {
             if ('\'' === $content[$i]) {
-                AnalyzerState::getInstance()->increment(AnalyzerState::SINGLE_QUOTES);
+                $analyzerState->increment(AnalyzerState::SINGLE_QUOTES);
             } elseif ('"' === $content[$i]) {
-                AnalyzerState::getInstance()->increment(AnalyzerState::DOUBLE_QUOTES);
+                $analyzerState->increment(AnalyzerState::DOUBLE_QUOTES);
             }
         }
     }

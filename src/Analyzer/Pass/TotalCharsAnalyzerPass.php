@@ -19,8 +19,8 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 class TotalCharsAnalyzerPass implements AnalyzerPassInterface
 {
-    public function analyze(SplFileInfo $file): void
+    public function analyze(SplFileInfo $file, AnalyzerState $analyzerState): void
     {
-        AnalyzerState::getInstance()->increment(AnalyzerState::TOTAL_CHARS, \strlen($file->getContents()));
+        $analyzerState->increment(AnalyzerState::TOTAL_CHARS, \strlen($file->getContents()));
     }
 }

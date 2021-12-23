@@ -10,20 +10,23 @@ class TotalCharsAnalyzerPassTest extends AnalyzerPassTest
     public function testItWorks(): void
     {
         $file = $this->mockSplFileInfoWithContents(\file_get_contents(__DIR__.'/../../Fixtures/blank_spaces.txt'));
+        $state = new AnalyzerState();
 
         $pass = new TotalCharsAnalyzerPass();
-        $pass->analyze($file);
+        $pass->analyze($file, $state);
 
-        $this->assertRunnerStateTypeCountSame(AnalyzerState::TOTAL_CHARS, 13);
+        $this->assertSame(13, $state->getTypeCount(AnalyzerState::TOTAL_CHARS));
+
     }
 
     public function testWithNoContent(): void
     {
         $file = $this->mockSplFileInfoWithContents('');
+        $state = new AnalyzerState();
 
         $pass = new TotalCharsAnalyzerPass();
-        $pass->analyze($file);
+        $pass->analyze($file, $state);
 
-        $this->assertRunnerStateTypeCountSame(AnalyzerState::TOTAL_CHARS, 0);
+        $this->assertSame(0, $state->getTypeCount(AnalyzerState::TOTAL_CHARS));
     }
 }

@@ -19,13 +19,13 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 class BlankSpacesAnalyzerPass implements AnalyzerPassInterface
 {
-    public function analyze(SplFileInfo $file): void
+    public function analyze(SplFileInfo $file, AnalyzerState $analyzerState): void
     {
         $content = $file->getContents();
 
         for ($i = 0; $i < \strlen($content); ++$i) {
             if (' ' === $content[$i]) {
-                AnalyzerState::getInstance()->increment(AnalyzerState::BLANK_SPACES);
+                $analyzerState->increment(AnalyzerState::BLANK_SPACES);
             }
         }
     }

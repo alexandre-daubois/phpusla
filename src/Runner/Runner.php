@@ -33,14 +33,18 @@ final class Runner
     public static function main(OutputInterface $output, string $directory): int
     {
         $finder = new PhpFileFinder($directory);
-        $analyzer = new PassesAnalyzer();
+
+        $state = new AnalyzerState();
+        $analyzer = new PassesAnalyzer($state);
 
         self::registerAnalyzerPasses($analyzer);
 
         $results = $finder->find();
-        $output->writeln(\sprintf("Found %d files.", $results->count()));
+        $filesCount = $results->count();
+        $output->writeln(\sprintf("Found %d files.", $filesCount));
+        $state->increment(AnalyzerState::TOTAL_FILES, $filesCount);
 
-        $progressBar = new ProgressBar($output, $results->count());
+        $progressBar = new ProgressBar($output, $filesCount);
 
         /** @var SplFileInfo $file */
         foreach ($results->getIterator() as $file) {
@@ -51,7 +55,7 @@ final class Runner
         $progressBar->finish();
         $output->writeln("\nFinished the work! Here are the useless results:");
 
-        AnalyzerState::getInstance()->prettyPrint($output, $results->count());
+        $state->prettyPrint($output);
 
         return Command::SUCCESS;
     }

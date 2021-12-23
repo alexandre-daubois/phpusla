@@ -20,6 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 final class AnalyzerState
 {
+    public const TOTAL_FILES = 'Total files';
     public const BLANK_SPACES = 'Blank spaces';
     public const TOTAL_CHARS = 'Total characters';
 
@@ -32,6 +33,7 @@ final class AnalyzerState
     public const SINGLE_QUOTES = 'Single quotes';
 
     public const TYPES = [
+        self::TOTAL_FILES,
         self::BLANK_SPACES,
         self::CLASSES_DEFINED,
         self::ANONYMOUS_CLASSES_DEFINED,
@@ -41,97 +43,85 @@ final class AnalyzerState
         self::SINGLE_QUOTES,
     ];
 
-    private static ?AnalyzerState $runnerState = null;
+    private array $state;
 
-    private static array $state;
-
-    private function __construct()
+    public function __construct()
     {
-        // This state class is a singleton.
-        self::$runnerState = null;
-        self::$state = \array_fill_keys(self::TYPES, [
+        $this->state = \array_fill_keys(self::TYPES, [
             'count' => 0,
             'extra' => [],
         ]);
-    }
-
-    public static function getInstance(): AnalyzerState
-    {
-        if (null === self::$runnerState) {
-            self::$runnerState = new self();
-        }
-
-        return self::$runnerState;
     }
 
     public function increment(string $type, int $count = 1): void
     {
-        self::$state[$type]['count'] += $count;
+        $this->state[$type]['count'] += $count;
     }
 
     public function setExtra(string $type, array $data): void
     {
-        self::$state[$type]['extra'] = $data;
+        $this->state[$type]['extra'] = $data;
     }
 
     public function getState(): array
     {
-        return self::$state;
+        return $this->state;
     }
 
     public function getTypeCount(string $type): int
     {
-        return self::$state[$type]['count'];
+        return $this->state[$type]['count'];
     }
 
     public function reset(): void
     {
-        self::$state = \array_fill_keys(self::TYPES, [
+        $this->state = \array_fill_keys(self::TYPES, [
             'count' => 0,
             'extra' => [],
         ]);
     }
 
-    public function prettyPrint(OutputInterface $output, int $totalFiles): void
+    public function prettyPrint(OutputInterface $output): void
     {
         $table = new Table($output);
         $table->setHeaders(['What', 'How much', 'Any comment?']);
         $table->setRows([
             $this->getRowByType(self::TOTAL_CHARS),
-            $this->getRowByType(self::BLANK_SPACES, comment: static function () {
+            $this->getRowByType(self::BLANK_SPACES, comment: function () {
                 return \sprintf("That's ~%d%% of total characters, what a waste.",
-                    self::getInstance()->getTypeCount(self::BLANK_SPACES)/self::getInstance()->getTypeCount(self::TOTAL_CHARS)*100.0);
+                    $this->getTypeCount(self::BLANK_SPACES)/$this->getTypeCount(self::TOTAL_CHARS)*100.0);
             }),
             new TableSeparator(),
             $this->getRowByType(self::CLASSES_DEFINED),
-            $this->getRowByType(self::ANONYMOUS_CLASSES_DEFINED, comment: static function () {
+            $this->getRowByType(self::ANONYMOUS_CLASSES_DEFINED, comment: function () {
                 return \sprintf("Around %d%% of total classes, who knows about anonymous classes anyway?",
-                    self::getInstance()->getTypeCount(self::ANONYMOUS_CLASSES_DEFINED)/self::getInstance()->getTypeCount(self::CLASSES_DEFINED)*100.0);
+                    $this->getTypeCount(self::ANONYMOUS_CLASSES_DEFINED)/$this->getTypeCount(self::CLASSES_DEFINED)*100.0);
             }),
             new TableSeparator(),
-            $this->getRowByType(self::END_OF_FILE_NEW_LINE, comment: static function () use ($totalFiles) {
-                return \sprintf("This leaves %d files without newline at their end.", $totalFiles - self::getInstance()->getTypeCount(self::END_OF_FILE_NEW_LINE));
+            $this->getRowByType(self::END_OF_FILE_NEW_LINE, comment: function () {
+                return \sprintf("This leaves %d files without newline at their end.", $this->getTypeCount(self::TOTAL_FILES) - $this->getTypeCount(self::END_OF_FILE_NEW_LINE));
             }),
             new TableSeparator(),
             $this->getRowByType("Quotes",
-                static function () {
+                function () {
                     return \sprintf('%d single quotes, %d double quotes',
-                        self::getInstance()->getTypeCount(self::SINGLE_QUOTES),
-                        self::getInstance()->getTypeCount(self::DOUBLE_QUOTES),
+                        $this->getTypeCount(self::SINGLE_QUOTES),
+                        $this->getTypeCount(self::DOUBLE_QUOTES),
                     );
                 },
-                static function () {
-                $singleQuotes = self::getInstance()->getTypeCount(self::SINGLE_QUOTES);
-                $doubleQuotes = self::getInstance()->getTypeCount(self::DOUBLE_QUOTES);
+                function () {
+                    $singleQuotes = $this->getTypeCount(self::SINGLE_QUOTES);
+                    $doubleQuotes = $this->getTypeCount(self::DOUBLE_QUOTES);
 
-                if ($singleQuotes > $doubleQuotes) {
-                    return \sprintf("%.2fx more single than double quotes.", $singleQuotes/$doubleQuotes);
-                } elseif ($singleQuotes < $doubleQuotes) {
-                    return \sprintf("%.2fx less single than double quotes.", $doubleQuotes/$singleQuotes);
+                    if ($singleQuotes > $doubleQuotes) {
+                        return \sprintf("%.2fx more single than double quotes.", $singleQuotes/$doubleQuotes);
+                    } elseif ($singleQuotes < $doubleQuotes) {
+                        return \sprintf("%.2fx less single than double quotes.", $doubleQuotes/$singleQuotes);
+                    }
+
+                    return \sprintf("Single ou double quotes are equally distributed, %d each!", $singleQuotes);
                 }
-
-                return \sprintf("Single ou double quotes are equally distributed, %d each!", $singleQuotes);
-            }),
+            ),
         ]);
 
         $table->render();
@@ -141,7 +131,7 @@ final class AnalyzerState
     {
         return [
             $type,
-            $value ? $value() : self::getInstance()->getTypeCount($type),
+            $value ? $value() : $this->getTypeCount($type),
             $comment ? $comment() : '',
         ];
     }

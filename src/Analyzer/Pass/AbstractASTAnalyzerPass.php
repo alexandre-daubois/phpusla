@@ -14,6 +14,7 @@ namespace Analyzer\Pass;
 use PhpParser\Error;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
+use State\AnalyzerState;
 use Symfony\Component\Finder\SplFileInfo;
 
 /**
@@ -29,14 +30,14 @@ abstract class AbstractASTAnalyzerPass implements AnalyzerPassInterface
         $this->parserFactory = (new ParserFactory())->create(self::PREFERRED_PHP_VERSION);
     }
 
-    public final function analyze(SplFileInfo $file): void
+    public final function analyze(SplFileInfo $file, AnalyzerState $analyzerState): void
     {
         try {
-            $this->analyzeAST($this->parserFactory->parse($file->getContents()));
+            $this->analyzeAST($this->parserFactory->parse($file->getContents()), $analyzerState);
         } catch (Error $error) {
             // Todo add log?
         }
     }
 
-    protected abstract function analyzeAST(array $ast): void;
+    protected abstract function analyzeAST(array $ast, AnalyzerState $analyzerState): void;
 }

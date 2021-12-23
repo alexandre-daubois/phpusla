@@ -12,6 +12,7 @@
 namespace Analyzer;
 
 use Analyzer\Pass\AnalyzerPassInterface;
+use State\AnalyzerState;
 use Symfony\Component\Finder\SplFileInfo;
 
 /**
@@ -22,12 +23,19 @@ final class PassesAnalyzer implements AnalyzerInterface
     /**
      * @var AnalyzerPassInterface[]
      */
-    protected array $passes = [];
+    private array $passes = [];
+
+    private AnalyzerState $analyzerState;
+
+    public function __construct(AnalyzerState $analyzerState)
+    {
+        $this->analyzerState = $analyzerState;
+    }
 
     public function analyze(SplFileInfo $file): void
     {
         foreach ($this->passes as $pass) {
-            $pass->analyze($file);
+            $pass->analyze($file, $this->analyzerState);
         }
     }
 
