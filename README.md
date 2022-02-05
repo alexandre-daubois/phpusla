@@ -11,4 +11,5 @@ PHPUsla strives to give you deeply useless analytics about your code, by providi
 - Count of defined classes and anonymous classes
 - Count of files finishing with a new-line
 - Quotes statistics
+- Calls of `use` and max calls of `use`
 - _More to come_

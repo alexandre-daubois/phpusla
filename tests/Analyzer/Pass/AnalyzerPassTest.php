@@ -8,11 +8,16 @@ use Symfony\Component\Finder\SplFileInfo;
 
 abstract class AnalyzerPassTest extends TestCase
 {
-    protected function mockSplFileInfoWithContents(string $content): SplFileInfo
+    protected function mockSplFileInfoWithContents(string $content, string $filename = null): SplFileInfo
     {
         $file = $this->createMock(SplFileInfo::class);
         $file->method('getContents')
             ->willReturn($content);
+
+        if ($filename) {
+            $file->method('getFilename')
+                ->willReturn($filename);
+        }
 
         return $file;
     }

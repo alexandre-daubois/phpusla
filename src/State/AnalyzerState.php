@@ -24,6 +24,9 @@ final class AnalyzerState
     public const BLANK_SPACES = 'Blank spaces';
     public const TOTAL_CHARS = 'Total characters';
 
+    public const USE_CALLS = 'Uses of use';
+    public const MAX_USE_CALL_PER_FILE = 'Max use of use in a file';
+
     public const ANONYMOUS_CLASSES_DEFINED = 'Anonymous classes defined';
     public const CLASSES_DEFINED = 'Classes defined';
 
@@ -41,6 +44,8 @@ final class AnalyzerState
         self::TOTAL_CHARS,
         self::DOUBLE_QUOTES,
         self::SINGLE_QUOTES,
+        self::USE_CALLS,
+        self::MAX_USE_CALL_PER_FILE,
     ];
 
     private array $state;
@@ -58,6 +63,11 @@ final class AnalyzerState
         $this->state[$type]['count'] += $count;
     }
 
+    public function set(string $type, int $value): void
+    {
+        $this->state[$type]['count'] = $value;
+    }
+
     public function setExtra(string $type, array $data): void
     {
         $this->state[$type]['extra'] = $data;
@@ -71,6 +81,11 @@ final class AnalyzerState
     public function getTypeCount(string $type): int
     {
         return $this->state[$type]['count'];
+    }
+
+    public function getTypeExtra(string $type): array
+    {
+        return $this->state[$type]['extra'];
     }
 
     public function reset(): void
@@ -122,6 +137,11 @@ final class AnalyzerState
                     return \sprintf("Single ou double quotes are equally distributed, %d each!", $singleQuotes);
                 }
             ),
+            new TableSeparator(),
+            $this->getRowByType(self::USE_CALLS),
+            $this->getRowByType(self::MAX_USE_CALL_PER_FILE, comment: function () {
+                return \sprintf('The big winner of this category is %s.', $this->getTypeExtra(self::MAX_USE_CALL_PER_FILE)['filename']);
+            }),
         ]);
 
         $table->render();

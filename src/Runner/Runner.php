@@ -11,13 +11,14 @@
 
 namespace Runner;
 
+use Analyzer\AnalyzerInterface;
+use Analyzer\Pass\BlankSpacesAnalyzerPass;
 use Analyzer\Pass\ClassesAnalyzerPass;
 use Analyzer\Pass\EndOfFileNewLineAnalyzerPass;
 use Analyzer\Pass\QuotesAnalyzerPass;
 use Analyzer\Pass\TotalCharsAnalyzerPass;
+use Analyzer\Pass\UsesAnalyzerPass;
 use Analyzer\PassesAnalyzer;
-use Analyzer\AnalyzerInterface;
-use Analyzer\Pass\BlankSpacesAnalyzerPass;
 use Finder\PhpFileFinder;
 use State\AnalyzerState;
 use Symfony\Component\Console\Command\Command;
@@ -68,6 +69,7 @@ final class Runner
             ->registerPass(new ClassesAnalyzerPass())
             ->registerPass(new EndOfFileNewLineAnalyzerPass())
             ->registerPass(new QuotesAnalyzerPass())
+            ->registerPass(new UsesAnalyzerPass())
         ;
     }
 }

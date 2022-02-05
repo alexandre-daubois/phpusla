@@ -21,7 +21,7 @@ use State\AnalyzerState;
  */
 class ClassesAnalyzerPass extends AbstractASTAnalyzerPass
 {
-    protected function analyzeAST(array $ast, AnalyzerState $analyzerState): void
+    protected function analyzeAST(array $ast, AnalyzerState $analyzerState, string $filename): void
     {
         $analyzeResults = [
             AnalyzerState::ANONYMOUS_CLASSES_DEFINED => 0,

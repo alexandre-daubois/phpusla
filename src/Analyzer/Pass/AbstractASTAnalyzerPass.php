@@ -33,11 +33,11 @@ abstract class AbstractASTAnalyzerPass implements AnalyzerPassInterface
     public final function analyze(SplFileInfo $file, AnalyzerState $analyzerState): void
     {
         try {
-            $this->analyzeAST($this->parserFactory->parse($file->getContents()), $analyzerState);
+            $this->analyzeAST($this->parserFactory->parse($file->getContents()), $analyzerState, $file->getFilename());
         } catch (Error $error) {
             // Todo add log?
         }
     }
 
-    protected abstract function analyzeAST(array $ast, AnalyzerState $analyzerState): void;
+    protected abstract function analyzeAST(array $ast, AnalyzerState $analyzerState, string $filename): void;
 }
