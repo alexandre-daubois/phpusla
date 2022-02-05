@@ -13,3 +13,15 @@ PHPUsla strives to give you deeply useless analytics about your code, by providi
 - Quotes statistics
 - Calls of `use` and max calls of `use`
 - _More to come_
+
+## Install
+
+```bash
+composer require phpusla/phpusla dev-master
+```
+
+## Use
+
+```bash
+vendor/bin/phpusla
+```
