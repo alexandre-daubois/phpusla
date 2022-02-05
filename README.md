@@ -22,7 +22,7 @@ PHPUsla strives to give you deeply useless analytics about your code, by providi
 ## Install
 
 ```bash
-composer require phpusla/phpusla v1.0-beta
+composer require phpusla/phpusla ^v1.0-beta
 ```
 
 ## Use
