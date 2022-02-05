@@ -1,5 +1,5 @@
 {
-    "name": "alexandredaubois/phpusla",
+    "name": "phpusla/phpusla",
     "description": "Get useless statistics from your PHP code.",
     "type": "library",
     "license": "BSD-3-Clause",
